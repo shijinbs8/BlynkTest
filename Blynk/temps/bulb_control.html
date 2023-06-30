@@ -1,0 +1,109 @@
+<style>
+  /* Base styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-bottom: 10px;
+}
+
+.switch input {
+  display: none;
+}
+
+/* Slider styles */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+}
+
+/* Checked state */
+input:checked + .slider {
+  background-color: green;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Focus state */
+input:focus + .slider {
+  box-shadow: 0 0 2px 3px rgba(33, 150, 243, 0.3);
+}
+
+/* Rounded style */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Hover effect */
+.slider:hover {
+  background-color: #e0e0e0;
+}
+
+.slider:hover:before {
+  transform: scale(1.1);
+}
+
+/* Active effect */
+.slider:active:before {
+  transform: scale(0.9);
+}
+
+</style>
+<h2>{{ classroom.name }}</h2>
+{% for bulb in bulbs %}
+  <h3>{{ bulb.name }}</h3>
+  <form id="form-{{ bulb.id }}" method="POST" action="{% url 'update_pin' classroom.id bulb.id %}">
+    {% csrf_token %}
+    <input type="hidden" name="token" value="{{ classroom.token }}">
+    <input type="hidden" name="pin" value="{{ bulb.pin }}">
+    <input type="hidden" name="status" id="status-{{ bulb.id }}" value="{% if bulb.status %}on{% else %}off{% endif %}">
+  </form>
+  <label class="switch">
+    <input type="checkbox" id="switch-{{ bulb.id }}" {% if bulb.status %}checked{% endif %} onclick="toggleSwitch('{{ bulb.id }}')">
+    <span class="slider"></span>
+  </label>
+{% endfor %}
+
+<script>
+  function toggleSwitch(bulbId) {
+    const switchElement = document.getElementById(`switch-${bulbId}`);
+    const statusElement = document.getElementById(`status-${bulbId}`);
+    const formElement = document.getElementById(`form-${bulbId}`);
+
+    if (switchElement.checked) {
+      statusElement.value = 'on';
+    } else {
+      statusElement.value = 'off';
+    }
+
+    formElement.submit();
+  }
+</script>
+<a href="/">Home</a>

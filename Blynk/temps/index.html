@@ -1,0 +1,3 @@
+{% for classroom in classrooms %}
+  <a href="{% url 'bulb_control' classroom.id %}">{{ classroom.name }}</a><br>
+{% endfor %}

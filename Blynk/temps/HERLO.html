@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">
+    <img src="" width="30" height="30" alt="PHOTO">
+  </a>
+</nav>
+<body>
+{% for i in names %}
+<h2>{{i.name}}</h2>
+<h2>{{i.id}}</h2>
+{% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <button type="submit">Submit
+        </button>
+    </form>
+
+</body>
+</html>
